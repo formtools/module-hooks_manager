@@ -3,10 +3,8 @@
 require_once("../../global/library.php");
 ft_init_module_page();
 
-// due to bug #349
-hm_clear_dud_hook_call_entries();
-
-require_once(dirname(__FILE__) . "/library.php");
+$folder = dirname(__FILE__);
+require_once("$folder/library.php");
 
 if (isset($_POST["add_rule"]))
   list($g_success, $g_message) = hm_add_rule($_POST);
@@ -27,32 +25,13 @@ $page_vars["head_title"]  = $L["module_name"];
 $page_vars["results"]     = $results;
 $page_vars["num_results"] = $num_results;
 $page_vars["pagination"] = ft_get_page_nav($num_results, $per_page, $page, "");
-$page_vars["js_messages"] = array("word_edit");
 $page_vars["head_js"] =<<< EOF
 var page_ns = {};
-page_ns.dialog = $("<div></div>");
-page_ns.delete_rule = function(rule_id) {
+page_ns.delete_rule = function(rule_id)
+{
+  if (confirm("{$L["confirm_delete_rule"]}"))
+    window.location = 'index.php?delete=' + rule_id;
 
-  ft.create_dialog({
-    title:      "{$LANG["phrase_please_confirm"]}",
-    dialog:     page_ns.dialog,
-    content:    "{$L["confirm_delete_rule"]}",
-    popup_type: "warning",
-    buttons: [
-      {
-        text:  "{$LANG["word_yes"]}",
-        click: function() {
-          window.location = 'index.php?delete=' + rule_id;
-        }
-      },
-      {
-        text:  "{$LANG["word_no"]}",
-        click: function() {
-          $(this).dialog("close");
-        }
-      }
-    ]
-  });
   return false;
 }
 EOF;

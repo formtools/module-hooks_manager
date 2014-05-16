@@ -3,11 +3,7 @@
   <table cellpadding="0" cellspacing="0">
   <tr>
     <td width="45"><img src="images/icon.gif" width="34" height="34" /></td>
-    <td class="title">
-      <a href="../../admin/modules">{$LANG.word_modules}</a>
-      <span class="joiner">&raquo;</span>
-      {$L.module_name}
-    </td>
+    <td class="title">{$L.module_name|upper}</td>
   </tr>
   </table>
 
@@ -30,9 +26,9 @@
       <th>{$L.phrase_rule_name}</th>
       <th>{$L.phrase_hook_type}</th>
       <th>{$L.word_hook}</th>
-      <th width="100">{$LANG.word_status}</th>
-      <th class="edit"></th>
-      <th class="del"></th>
+      <th width="60">{$LANG.word_status}</th>
+      <th width="60">{$LANG.word_edit|upper}</th>
+      <th width="60" class="del">{$LANG.word_delete|upper}</th>
     </tr>
 
     {foreach from=$results item=result name=row}
@@ -50,7 +46,7 @@
         </td>
         <td>
 	  {if $result.hook_type == "code"}
-	    {$result.function_name}, {$result.action_location}
+	    {$result.core_function}, {$result.action_location}
 	  {else}
 	    {$result.action_location}
 	  {/if}
@@ -62,11 +58,11 @@
              <span class="red">{$LANG.word_disabled}</span>
           {/if}
         </td>
-        <td class="edit"><a href="edit.php?hook_id={$hook_id}"></a></td>
-        <td class="del"><a href="#" onclick="return page_ns.delete_rule({$hook_id})"></a></td>
+        <td align="center"><a href="edit.php?hook_id={$hook_id}">{$LANG.word_edit|upper}</a></td>
+        <td class="del" align="center"><a href="#" onclick="return page_ns.delete_rule({$hook_id})">{$LANG.word_delete|upper}</a></td>
       </tr>
     {/foreach}
-
+    
     </table>
 
   {/if}
