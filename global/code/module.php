@@ -57,5 +57,8 @@ function hooks_manager__upgrade($old_version, $new_version)
   if ($old_version_info["release_date"] < 20100911)
   {
     @mysql_query("ALTER TABLE {$g_table_prefix}module_hooks_manager_rules TYPE=MyISAM");
+    @mysql_query("ALTER TABLE {$g_table_prefix}module_hooks_manager_rules ENGINE=MyISAM");
   }
+
+  hm_clear_dud_hook_call_entries();
 }

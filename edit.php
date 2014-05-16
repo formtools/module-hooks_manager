@@ -3,8 +3,7 @@
 require("../../global/library.php");
 ft_init_module_page();
 
-$folder = dirname(__FILE__);
-require_once("$folder/library.php");
+require_once(dirname(__FILE__) . "/library.php");
 
 if (isset($_POST["add_rule"]))
 {

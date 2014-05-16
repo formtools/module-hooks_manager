@@ -1,5 +1,5 @@
 <?php
 
-$folder = dirname(__FILE__);
-require_once("$folder/global/code/module.php");
-require_once("$folder/global/code/rules.php");
+require_once(dirname(__FILE__) . "/global/code/general.php");
+require_once(dirname(__FILE__) . "/global/code/module.php");
+require_once(dirname(__FILE__) . "/global/code/rules.php");
