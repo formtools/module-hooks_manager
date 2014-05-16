@@ -446,12 +446,11 @@ function hm_parse_code_hook($vars)
   // scope (e.g. $vars["account_id"] becomes $account_id). This is for the sake of the
   // developer using the Hooks Manager UI
   $passed_vars = $vars;
+  $overridable_vars = $vars["form_tools_overridable_vars"];
+
   unset($passed_vars["form_tools_hook_info"]);
   unset($passed_vars["form_tools_overridable_vars"]);
   unset($passed_vars["form_tools_calling_function"]);
-
-  // this stores the overridable variable names in a constant
-  define("FORM_TOOLS_OVERRIDABLE_VARS", join(",", $vars["form_tools_overridable_vars"]));
 
   extract($passed_vars);
   $hook_info = hm_get_rule($vars["form_tools_hook_info"]["hook_id"]);
@@ -459,14 +458,13 @@ function hm_parse_code_hook($vars)
   eval($hook_info["code"]);
 
   // return the overridable values
-  $form_tools_overridable_vars = explode(",", FORM_TOOLS_OVERRIDABLE_VARS);
-  $return_hash = array();
-  foreach ($form_tools_overridable_vars as $var)
+  $hooks_manager_return_hash = array();
+  foreach ($overridable_vars as $var)
   {
-    $return_hash[$var] = $$var;
+    $hooks_manager_return_hash[$var] = $$var;
   }
 
-  return $return_hash;
+  return $hooks_manager_return_hash;
 }
 
 
