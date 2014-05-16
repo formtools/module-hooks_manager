@@ -3,7 +3,13 @@
   <table cellpadding="0" cellspacing="0">
   <tr>
     <td width="45"><a href="index.php"><img src="images/icon.gif" border="0" width="34" height="34" /></a></td>
-    <td class="title"><a href="index.php">{$L.module_name|upper}</a> &raquo; {$L.phrase_add_rule|upper}</td>
+    <td class="title"><a href="index.php">
+      <a href="../../admin/modules">{$LANG.word_modules}</a>
+      <span class="joiner">&raquo;</span>
+      <a href="index.php">{$L.module_name}</a>
+      <span class="joiner">&raquo;</span>
+      {$L.phrase_add_rule}
+    </td>
   </tr>
   </table>
 
@@ -57,7 +63,7 @@
           <select name="code_hook_dropdown" onchange="hm.select_hook(this.value)" onkeyup="hm.select_hook(this.value)">
             <option value="">{$LANG.phrase_please_select}</option>
             {foreach from=$code_hooks item=hook name=row}
-              <option value="{$hook.name},{$hook.when}">{$hook.name}, {$hook.when}</option>
+              <option value="{$hook.function_name},{$hook.action_location}">{$hook.function_name}, {$hook.action_location}</option>
             {/foreach}
           </select>
         </td>
@@ -68,7 +74,7 @@
           <div style="border: 1px solid #666666; background: #ffffff; padding: 3px">
             <textarea name="code_hook_code" id="code_hook_code" style="width:100%; height:240px"></textarea>
           </div>
-          <script type="text/javascript">
+          <script>
           var html_editor = new CodeMirror.fromTextArea("code_hook_code", {literal}{{/literal}
           parserfile: ["parsejavascript.js", "tokenizejavascript.js"],
           path: "{$g_root_url}/global/codemirror/js/",
@@ -85,7 +91,7 @@
               <div id="code_hook_params">&#8212;</div>
             </td>
             <td valign="top">
-              <div id="code_hook_overridable_values">&#8212;</div>            
+              <div id="code_hook_overridable_values">&#8212;</div>
             </td>
           </tr>
           </table>
@@ -108,7 +114,7 @@
             <select name="template_hook_dropdown">
               <option value="">{$LANG.phrase_please_select}</option>
               {foreach from=$template_hooks item=hook name=row}
-                <option value="{$hook.name}">{$hook.file} - {$hook.name}</option>
+                <option value="{$hook.action_location}">{$hook.filepath} - {$hook.action_location}</option>
               {/foreach}
             </select>
           </td>
@@ -130,7 +136,7 @@
             <div style="border: 1px solid #666666; background: #ffffff; padding: 3px">
               <textarea name="template_hook_code" id="template_hook_code" style="width:100%; height:240px"></textarea>
             </div>
-            <script type="text/javascript">
+            <script>
             var html_editor = new CodeMirror.fromTextArea("template_hook_code", {literal}{{/literal}
             parserfile: ["parsejavascript.js", "tokenizejavascript.js"],
             path: "{$g_root_url}/global/codemirror/js/",
@@ -141,7 +147,7 @@
         </tr>
         </table>
       </div>
-  
+
       <p>
         <input type="submit" name="add_rule" value="{$L.phrase_add_rule}" />
       </p>
@@ -155,7 +161,7 @@
           <td width="120" valign="top">{$L.phrase_custom_hook}</td>
           <td>
             <input type="text" name="custom_hook" id="custom_hook" onkeyup="hm.generate_custom_hook()" style="width: 240px" />
-            <span class="medium_grey">{$L.text_custom_hook_desc}</span> 
+            <span class="medium_grey">{$L.text_custom_hook_desc}</span>
           </td>
         </tr>
         <tr>
@@ -192,7 +198,7 @@
         </tr>
         </table>
 
-      </div>  
+      </div>
       <p>
         <input type="submit" name="add_rule" value="{$L.phrase_add_rule}" />
       </p>

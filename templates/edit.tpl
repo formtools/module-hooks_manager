@@ -3,7 +3,13 @@
   <table cellpadding="0" cellspacing="0">
   <tr>
     <td width="45"><a href="index.php"><img src="images/icon.gif" border="0" width="34" height="34" /></a></td>
-    <td class="title"><a href="index.php">{$L.module_name|upper}</a> &raquo; {$L.phrase_edit_rule|upper}</td>
+    <td class="title">
+      <a href="../../admin/modules">{$LANG.word_modules}</a>
+      <span class="joiner">&raquo;</span>
+      <a href="index.php">{$L.module_name}</a>
+      <span class="joiner">&raquo;</span>
+      {$L.phrase_edit_rule}
+    </td>
   </tr>
   </table>
 
@@ -40,14 +46,11 @@
     <tr>
       <td>{$L.phrase_hook_type}</td>
       <td>
-        <input type="radio" name="hook_type" value="code" id="ht1" 
-          {if $rule_info.is_custom_hook == "no" && $rule_info.hook_type == "code"}checked{/if} onclick="hm.select_hook_type('code')" />
+        <input type="radio" name="hook_type" value="code" id="ht1" {if $rule_info.is_custom_hook == "no" && $rule_info.hook_type == "code"}checked{/if} />
           <label for="ht1">{$L.phrase_code_hook}</label>
-        <input type="radio" name="hook_type" value="template" id="ht2" 
-          {if $rule_info.is_custom_hook == "no" && $rule_info.hook_type == "template"}checked{/if} onclick="hm.select_hook_type('template')" />
+        <input type="radio" name="hook_type" value="template" id="ht2" {if $rule_info.is_custom_hook == "no" && $rule_info.hook_type == "template"}checked{/if}" />
           <label for="ht2">{$L.phrase_template_hook}</label>
-        <input type="radio" name="hook_type" value="custom" id="ht3" 
-          {if $rule_info.is_custom_hook == "yes"}checked{/if} onclick="hm.select_hook_type('custom')" />
+        <input type="radio" name="hook_type" value="custom" id="ht3" {if $rule_info.is_custom_hook == "yes"}checked{/if}  />
           <label for="ht3">{$L.phrase_custom_hook}</label>
       </td>
     </tr>
@@ -61,7 +64,8 @@
           <select name="code_hook_dropdown" id="code_hook_dropdown" onchange="hm.select_hook(this.value)" onkeyup="hm.select_hook(this.value)">
             <option value="">{$LANG.phrase_please_select}</option>
             {foreach from=$code_hooks item=hook name=row}
-              <option value="{$hook.name},{$hook.when}" {if $rule_info.core_function == $hook.name && $rule_info.action_location == $hook.when}selected{/if}>{$hook.name}, {$hook.when}</option>
+              <option value="{$hook.function_name},{$hook.action_location}"
+                {if $rule_info.function_name == $hook.function_name && $rule_info.action_location == $hook.action_location}selected{/if}>{$hook.function_name}, {$hook.action_location}</option>
             {/foreach}
           </select>
         </td>
@@ -72,7 +76,7 @@
           <div style="border: 1px solid #666666; background: #ffffff; padding: 3px">
             <textarea name="code_hook_code" id="code_hook_code" style="width:100%; height:240px">{$rule_info.code}</textarea>
           </div>
-          <script type="text/javascript">
+          <script>
           var html_editor = new CodeMirror.fromTextArea("code_hook_code", {literal}{{/literal}
           parserfile: ["parsejavascript.js", "tokenizejavascript.js"],
           path: "{$g_root_url}/global/codemirror/js/",
@@ -82,21 +86,21 @@
           <table cellspacing="1" cellpadding="0" width="100%" class="hook_param_table">
           <tr>
             <th width="50%">{$L.phrase_available_variables}</th>
-            <th width="50%">{$L.phrase_overridable_variables}</th> 
+            <th width="50%">{$L.phrase_overridable_variables}</th>
           </tr>
           <tr>
             <td valign="top">
               <div id="code_hook_params">&#8212;</div>
             </td>
             <td valign="top">
-              <div id="code_hook_overridable_values">&#8212;</div>            
+              <div id="code_hook_overridable_values">&#8212;</div>
             </td>
           </tr>
           </table>
         </td>
       </tr>
       </table>
-  
+
       <p>
         <input type="submit" name="update_rule" value="{$L.phrase_update_rule}" />
       </p>
@@ -111,7 +115,7 @@
             <select name="template_hook_dropdown">
               <option value="">{$LANG.phrase_please_select}</option>
               {foreach from=$template_hooks item=hook name=row}
-                <option value="{$hook.name}" {if $rule_info.action_location == $hook.name}selected{/if}>{$hook.file} - {$hook.name}</option>
+                <option value="{$hook.action_location}" {if $rule_info.action_location == $hook.action_location}selected{/if}>{$hook.filepath} - {$hook.action_location}</option>
               {/foreach}
             </select>
           </td>
@@ -119,11 +123,11 @@
         <tr>
           <td>{$L.phrase_content_type}</td>
           <td>
-            <input type="radio" name="hook_code_type" value="html" id="thct1" {if $rule_info.hook_code_type == "html"}checked{/if} />
+            <input type="radio" name="template_hook_code_type" value="html" id="thct1" {if $rule_info.hook_code_type == "html"}checked{/if} />
               <label for="thct1">{$LANG.word_html}</label>
-            <input type="radio" name="hook_code_type" value="php" id="thct2" {if $rule_info.hook_code_type == "php"}checked{/if} />
+            <input type="radio" name="template_hook_code_type" value="php" id="thct2" {if $rule_info.hook_code_type == "php"}checked{/if} />
               <label for="thct2">{$L.word_php}</label>
-            <input type="radio" name="hook_code_type" value="smarty" id="thct3" {if $rule_info.hook_code_type == "smarty"}checked{/if} />
+            <input type="radio" name="template_hook_code_type" value="smarty" id="thct3" {if $rule_info.hook_code_type == "smarty"}checked{/if} />
               <label for="thct3">{$L.word_smarty}</label>
           </td>
         </tr>
@@ -133,7 +137,7 @@
             <div style="border: 1px solid #666666; background: #ffffff; padding: 3px">
               <textarea name="template_hook_code" id="template_hook_code" style="width:100%; height:240px">{$rule_info.code}</textarea>
             </div>
-            <script type="text/javascript">
+            <script>
             var html_editor = new CodeMirror.fromTextArea("template_hook_code", {literal}{{/literal}
             parserfile: ["parsejavascript.js", "tokenizejavascript.js"],
             path: "{$g_root_url}/global/codemirror/js/",
@@ -144,7 +148,7 @@
         </tr>
         </table>
       </div>
-  
+
       <p>
         <input type="submit" name="update_rule" value="{$L.phrase_update_rule}" />
       </p>
@@ -158,7 +162,7 @@
           <td width="120" valign="top">{$L.phrase_custom_hook}</td>
           <td>
             <input type="text" name="custom_hook" id="custom_hook" value="{$rule_info.action_location}" onkeyup="hm.generate_custom_hook()" style="width: 240px" />
-            <span class="medium_grey">{$L.text_custom_hook_desc}</span> 
+            <span class="medium_grey">{$L.text_custom_hook_desc}</span>
           </td>
         </tr>
         <tr>
@@ -184,7 +188,7 @@
             <div style="border: 1px solid #666666; background: #ffffff; padding: 3px">
               <textarea name="custom_hook_code" id="custom_hook_code" style="width:100%; height:240px">{$rule_info.code}</textarea>
             </div>
-            <script type="text/javascript">
+            <script>
             var html_editor = new CodeMirror.fromTextArea("custom_hook_code", {literal}{{/literal}
             parserfile: ["parsejavascript.js", "tokenizejavascript.js"],
             path: "{$g_root_url}/global/codemirror/js/",
@@ -194,12 +198,12 @@
           </td>
         </tr>
         </table>
-        
-      </div>  
+
+      </div>
       <p>
         <input type="submit" name="update_rule" value="{$L.phrase_update_rule}" />
       </p>
     </div>
-    
+
   </form>
 {include file='modules_footer.tpl'}

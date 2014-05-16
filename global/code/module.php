@@ -18,7 +18,7 @@ function hooks_manager__install($module_id)
       code mediumtext NOT NULL,
       hook_code_type enum('na', 'php', 'html', 'smarty') NOT NULL default 'na',
       PRIMARY KEY (hook_id)
-    ) TYPE=MyISAM DEFAULT CHARSET=utf8
+    ) DEFAULT CHARSET=utf8
       ";
 
   $queries[] = "
