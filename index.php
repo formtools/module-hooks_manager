@@ -3,9 +3,6 @@
 require_once("../../global/library.php");
 ft_init_module_page();
 
-// due to bug #349
-hm_clear_dud_hook_call_entries();
-
 require_once(dirname(__FILE__) . "/library.php");
 
 if (isset($_POST["add_rule"]))

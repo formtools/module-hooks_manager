@@ -1,20 +1,22 @@
 <?php
 
 require("../../global/library.php");
-ft_init_module_page();
 
-require_once(dirname(__FILE__) . "/library.php");
+use FormTools\Modules;
+use FormTools\Modules\HooksManager\Rules;
 
-if (isset($_POST["add_rule"]))
-{
-  list($g_success, $g_message, $hook_id) = hm_add_rule($_POST);
-  $_POST["hook_id"] = $hook_id;
+
+$module = Modules::initModulePage("admin");
+$L = $module->getLangStrings();
+
+if (isset($_POST["add_rule"])) {
+    list($g_success, $g_message, $hook_id) = Rules::addRule($_POST, $L);
+    $_POST["hook_id"] = $hook_id;
 }
 // this updates a rule and returns the new hook ID
-else if (isset($_POST["update_rule"]))
-{
-  list($g_success, $g_message, $new_hook_id) = hm_update_rule($_POST["hook_id"], $_POST);
-  $_GET["hook_id"] = $new_hook_id;
+else if (isset($_POST["update_rule"])) {
+    list($g_success, $g_message, $new_hook_id) = Rules::updateRule($_POST["hook_id"], $_POST. $L);
+    $_GET["hook_id"] = $new_hook_id;
 }
 
 $hook_id = ft_load_module_field("hooks_manager", "hook_id", "hook_id");

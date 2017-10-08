@@ -43,6 +43,7 @@ $L["phrase_content_type"] = "Content Type";
 $L["phrase_custom_hook"] = "Custom Hook";
 $L["phrase_smarty_code"] = "Smarty Code";
 
+$L["text_error_installing"] = "There was a problem installing this module.";
 $L["notify_no_rules"] = "There are no rules defined for the Hooks Manager. Please click the button below to add a new rule.";
 $L["notify_rule_not_added"] = "There was a problem adding this rule.";
 $L["notify_rule_added"] = "The rule has been added.";
