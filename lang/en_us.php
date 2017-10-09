@@ -61,6 +61,6 @@ $L["validation_no_content_type"] = "Please select the content type.";
 $L["validation_no_custom_hook"] = "Please enter the name of the custom hook.";
 $L["validation_invalid_custom_hook_name"] = "The custom hook name may only contain alphanumeric or underscore characters.";
 
-$L["text_help"] = "Please see our <a href=\"http://modules.formtools.org/hooks_manager/documentation.php\" target=\"_blank\">online help documentation</a> for information on how to use this module.";
+$L["text_help"] = "Please see our <a href=\"https://docs.formtools.org/modules/hooks_manager/\" target=\"_blank\">online help documentation</a> for information on how to use this module.";
 $L["text_priority_desc"] = "(1 = highest priority, 100 = lowest priority)";
 $L["text_custom_hook_desc"] = "(alphanumeric, and underscores only)";

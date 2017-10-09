@@ -556,7 +556,7 @@ class Rules
     }
 
 
-    function hm_convert_hook_info_to_json($js_var_name, $hook_info)
+    public static function convertHookInfoToJson($js_var_name, $hook_info)
     {
         $js_rows = array();
         $rows = array();
@@ -564,6 +564,7 @@ class Rules
         // convert ALL form and View info into Javascript, for use in the page
         foreach ($hook_info as $hook_data) {
             $file = $hook_data["filepath"];
+
             $action_location = isset($hook_data["action_location"]) ? $hook_data["action_location"] : "";
             $name = $hook_data["function_name"] . "," . $action_location;
 

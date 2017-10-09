@@ -16,9 +16,13 @@ class Module extends FormToolsModule
     protected $authorEmail = "ben.keen@gmail.com";
     protected $authorLink = "https://formtools.org";
     protected $version = "2.0.0";
-    protected $date = "2017-10-07";
+    protected $date = "2017-10-08";
     protected $originLanguage = "en_us";
     protected $cssFiles = array("styles.css");
+    protected $jsFiles = array(
+        "{MODULEROOT}/global/hooks_manager.js",
+        "{FTROOT}/global/codemirror/js/codemirror.js"
+    );
 
     protected $nav = array(
         "module_name"   => array("index.php", false),

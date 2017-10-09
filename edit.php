@@ -5,7 +5,6 @@ require("../../global/library.php");
 use FormTools\Modules;
 use FormTools\Modules\HooksManager\Rules;
 
-
 $module = Modules::initModulePage("admin");
 $L = $module->getLangStrings();
 
@@ -15,25 +14,25 @@ if (isset($_POST["add_rule"])) {
 }
 // this updates a rule and returns the new hook ID
 else if (isset($_POST["update_rule"])) {
-    list($g_success, $g_message, $new_hook_id) = Rules::updateRule($_POST["hook_id"], $_POST. $L);
+    list($g_success, $g_message, $new_hook_id) = Rules::updateRule($_POST["hook_id"], $_POST, $L);
     $_GET["hook_id"] = $new_hook_id;
 }
 
-$hook_id = ft_load_module_field("hooks_manager", "hook_id", "hook_id");
-$rule_info = hm_get_rule($hook_id);
-$hook_info = hm_get_hooks();
+$hook_id = Modules::loadModuleField("hooks_manager", "hook_id", "hook_id");
+$rule_info = Rules::getRule($hook_id);
+$hook_info = Rules::getHooks();
 $code_hooks = $hook_info["code_hooks"];
-$js_code_hook_info = hm_convert_hook_info_to_json("code_hooks", $code_hooks);
+$js_code_hook_info = Rules::convertHookInfoToJson("code_hooks", $code_hooks);
 $template_hooks = $hook_info["template_hooks"];
-$js_template_hook_info = hm_convert_hook_info_to_json("template_hooks", $template_hooks);
+$js_template_hook_info = Rules::convertHookInfoToJson("template_hooks", $template_hooks);
 
-// ------------------------------------------------------------------------------------------------
+$page_vars = array(
+    "head_title" => $L["phrase_edit_rule"],
+    "rule_info"  => $rule_info,
+    "code_hooks"     => $code_hooks,
+    "template_hooks" => $template_hooks
+);
 
-$page_vars = array();
-$page_vars["head_title"] = $L["phrase_edit_rule"];
-$page_vars["rule_info"]  = $rule_info;
-$page_vars["code_hooks"]     = $code_hooks;
-$page_vars["template_hooks"] = $template_hooks;
 $page_vars["head_js"] =<<< EOF
 $js_code_hook_info
 $js_template_hook_info
@@ -58,10 +57,4 @@ $(function() {
 });
 EOF;
 
-$page_vars["head_string"] =<<< EOF
-<script src="$g_root_url/modules/hooks_manager/global/hooks_manager.js"></script>
-<script src="$g_root_url/global/codemirror/js/codemirror.js"></script>
-<link type="text/css" rel="stylesheet" href="$g_root_url/modules/hooks_manager/global/styles.css">
-EOF;
-
-ft_display_module_page("templates/edit.tpl", $page_vars);
+$module->displayPage("templates/edit.tpl", $page_vars);
