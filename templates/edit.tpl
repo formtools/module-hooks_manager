@@ -61,12 +61,33 @@
       <tr>
         <td width="120" valign="top">{$L.phrase_code_hook}</td>
         <td>
-          <select name="code_hook_dropdown" id="code_hook_dropdown" onchange="hm.select_hook(this.value)" onkeyup="hm.select_hook(this.value)">
-            <option value="">{$LANG.phrase_please_select}</option>
-            {foreach from=$code_hooks item=hook name=row}
-              <option value="{$hook.function_name},{$hook.action_location}"
-                {if $rule_info.function_name == $hook.function_name && $rule_info.action_location == $hook.action_location}selected{/if}>{$hook.function_name}, {$hook.action_location}</option>
-            {/foreach}
+          <select name="code_hook_dropdown" id="code_hook_dropdown" onchange="hm.select_hook(this)" onkeyup="hm.select_hook(this)">
+              <option value="">{$LANG.phrase_please_select}</option>
+              {foreach from=$code_hooks key=file item=file_hooks name=files}
+                  <optgroup label="{$file}">
+                      {foreach from=$file_hooks item=row name=file_hooks}
+
+                          <!--
+                          [hook_id] => 83
+                          [is_custom_hook] => no
+                          [status] => enabled
+                          [rule_name] => One
+                          [code] =>
+                          [hook_code_type] => na
+                          [hook_type] => code
+                          [action_location] => getFormField
+                          [module_folder] => hooks_manager
+                          [function_name] => /global/code/Fields.class.php
+                          [hook_function] => hm_parse_code_hook
+                          [priority] => 50
+                          -->
+
+                          {if $rule_info.function_name == $hook.function_name && $rule_info.action_location == $hook.action_location}selected{/if}
+
+                          <option value="{$file},{$row.function_name},{$row.action_location}" data-index="{$smarty.foreach.file_hooks.index}">{$row.function_name}, {$row.action_location}</option>
+                      {/foreach}
+                  </optgroup>
+              {/foreach}
           </select>
         </td>
       </tr>

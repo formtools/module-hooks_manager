@@ -8,25 +8,33 @@ use FormTools\Modules\HooksManager\Rules;
 $module = Modules::initModulePage("admin");
 $L = $module->getLangStrings();
 
+$success = true;
+$message = "";
 if (isset($_POST["add_rule"])) {
-    list($g_success, $g_message, $hook_id) = Rules::addRule($_POST, $L);
+    list($success, $message, $hook_id) = Rules::addRule($_POST, $L);
     $_POST["hook_id"] = $hook_id;
 }
 // this updates a rule and returns the new hook ID
 else if (isset($_POST["update_rule"])) {
-    list($g_success, $g_message, $new_hook_id) = Rules::updateRule($_POST["hook_id"], $_POST, $L);
+    list($success, $message, $new_hook_id) = Rules::updateRule($_POST["hook_id"], $_POST, $L);
     $_GET["hook_id"] = $new_hook_id;
 }
 
 $hook_id = Modules::loadModuleField("hooks_manager", "hook_id", "hook_id");
 $rule_info = Rules::getRule($hook_id);
 $hook_info = Rules::getHooks();
-$code_hooks = $hook_info["code_hooks"];
-$js_code_hook_info = Rules::convertHookInfoToJson("code_hooks", $code_hooks);
-$template_hooks = $hook_info["template_hooks"];
-$js_template_hook_info = Rules::convertHookInfoToJson("template_hooks", $template_hooks);
+
+$code_hooks = Rules::groupHooksByFile("code_hooks", $hook_info["code_hooks"]);
+$template_hooks = Rules::groupHooksByFile("template_hooks", $hook_info["template_hooks"]);
+
+$js_code_hooks = "var code_hooks = " . json_encode($code_hooks);
+$js_template_hooks = "var template_hooks = " . json_encode($template_hooks);
+
+print_r($rule_info);
 
 $page_vars = array(
+    "g_success" => $success,
+    "g_message" => $message,
     "head_title" => $L["phrase_edit_rule"],
     "rule_info"  => $rule_info,
     "code_hooks"     => $code_hooks,
@@ -34,8 +42,8 @@ $page_vars = array(
 );
 
 $page_vars["head_js"] =<<< EOF
-$js_code_hook_info
-$js_template_hook_info
+$js_code_hooks
+$js_template_hooks
 var rules = [];
 rules.push("required,rule_name,{$L["validation_no_rule_name"]}");
 rules.push("required,hook_type,{$L["validation_no_hook_type"]}");

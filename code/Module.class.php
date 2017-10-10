@@ -20,7 +20,7 @@ class Module extends FormToolsModule
     protected $originLanguage = "en_us";
     protected $cssFiles = array("styles.css");
     protected $jsFiles = array(
-        "{MODULEROOT}/global/hooks_manager.js",
+        "{MODULEROOT}/hooks_manager.js",
         "{FTROOT}/global/codemirror/js/codemirror.js"
     );
 

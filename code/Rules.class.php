@@ -555,52 +555,19 @@ class Rules
         );
     }
 
-
-    public static function convertHookInfoToJson($js_var_name, $hook_info)
+    public static function groupHooksByFile($js_var_name, $hook_info)
     {
-        $js_rows = array();
-        $rows = array();
-
+        $grouped_by_file = array();
         // convert ALL form and View info into Javascript, for use in the page
         foreach ($hook_info as $hook_data) {
             $file = $hook_data["filepath"];
 
-            $action_location = isset($hook_data["action_location"]) ? $hook_data["action_location"] : "";
-            $name = $hook_data["function_name"] . "," . $action_location;
-
-            $params = isset($hook_data["params"]) ? $hook_data["params"] : array();
-            $params = explode(",", $params);
-
-            $escaped_params = array();
-            foreach ($params as $param) {
-                $escaped_params[] = "\"$param\"";
+            if (!array_key_exists($file, $grouped_by_file)) {
+                $grouped_by_file[$file] = array();
             }
-            $escaped_params_str = implode(", ", $escaped_params);
-
-            $overridable = isset($hook_data["overridable"]) ? $hook_data["overridable"] : array();
-            $overridable = explode(",", $overridable);
-
-            $escaped_overridable = array();
-            foreach ($overridable as $row) {
-                $escaped_overridable[] = "\"$row\"";
-            }
-            $escaped_overridable_str = implode(", ", $escaped_overridable);
-
-            $hook_js = <<< EOF
-  "$name": {
-    function_name: "$file",
-    action_location: "$action_location",
-    params: [ $escaped_params_str ],
-    overridable: [ $escaped_overridable_str ]
-  }
-EOF;
-
-            $rows[] = $hook_js;
+            $grouped_by_file[$file][] = $hook_data;
         }
 
-        $js_rows[] = "var $js_var_name = {" . join(",\n", $rows) . "}";
-        $js = join(";\n", $js_rows);
-
-        return $js;
+        return $grouped_by_file;
     }
 }

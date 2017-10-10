@@ -11,10 +11,11 @@ $LANG = Core::$L;
 $L = $module->getLangStrings();
 
 $hook_info = Rules::getHooks();
-$code_hooks = $hook_info["code_hooks"];
-$js_code_hook_info = Rules::convertHookInfoToJson("code_hooks", $code_hooks);
-$template_hooks = $hook_info["template_hooks"];
-$js_template_hook_info = Rules::convertHookInfoToJson("template_hooks", $template_hooks);
+$code_hooks = Rules::groupHooksByFile("code_hooks", $hook_info["code_hooks"]);
+$template_hooks = Rules::groupHooksByFile("template_hooks", $hook_info["template_hooks"]);
+
+$js_code_hooks = "var code_hooks = " . json_encode($code_hooks);
+$js_template_hooks = "var template_hooks = " . json_encode($template_hooks);
 
 $page_vars = array(
     "head_title" => $L["phrase_add_rule"],
@@ -23,8 +24,8 @@ $page_vars = array(
 );
 
 $page_vars["head_js"] =<<< EOF
-$js_code_hook_info
-$js_template_hook_info
+$js_code_hooks
+$js_template_hooks
 var rules = [];
 rules.push("required,rule_name,{$L["validation_no_rule_name"]}");
 rules.push("required,hook_type,{$L["validation_no_hook_type"]}");

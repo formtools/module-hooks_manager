@@ -60,10 +60,15 @@
       <tr>
         <td width="120" valign="top">{$L.phrase_code_hook}</td>
         <td>
-          <select name="code_hook_dropdown" onchange="hm.select_hook(this.value)" onkeyup="hm.select_hook(this.value)">
+          <select name="code_hook_dropdown" onchange="hm.select_hook(this)" onkeyup="hm.select_hook(this)">
             <option value="">{$LANG.phrase_please_select}</option>
-            {foreach from=$code_hooks item=hook name=row}
-              <option value="{$hook.function_name},{$hook.action_location}">{$hook.function_name}, {$hook.action_location}</option>
+            {foreach from=$code_hooks key=file item=file_hooks name=files}
+              <optgroup label="{$file}">
+                  {foreach from=$file_hooks item=row name=file_hooks}
+                      <option value="{$file},{$row.function_name},{$row.action_location}"
+                         data-index="{$smarty.foreach.file_hooks.index}">{$row.function_name}, {$row.action_location}</option>
+                  {/foreach}
+              </optgroup>
             {/foreach}
           </select>
         </td>
@@ -114,7 +119,11 @@
             <select name="template_hook_dropdown">
               <option value="">{$LANG.phrase_please_select}</option>
               {foreach from=$template_hooks item=hook name=row}
-                <option value="{$hook.action_location}">{$hook.filepath} - {$hook.action_location}</option>
+              <optgroup label="{$file}">
+                  {foreach from=$file_hooks item=row}
+                      <option value="{$row.function_name},{$row.action_location}">{$row.function_name}, {$row.action_location}</option>
+                  {/foreach}
+              </optgroup>
               {/foreach}
             </select>
           </td>

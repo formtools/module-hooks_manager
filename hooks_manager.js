@@ -1,19 +1,25 @@
 var hm = {};
 hm.current_code_hook_type = "code"; // may be overridden by the page
 
-hm.select_hook = function(func) {
+hm.select_hook = function(field) {
+  var value = field.value;
+
   var paramsHTML = "";
   var valsHTML = "";
-  if (func == "") {
+  if (value === "") {
     paramsHTML = "&#8212;";
     valsHTML   = "&#8212;";
   } else {
-    var data = code_hooks[func];
-    var params = code_hooks[func].params;
+    var parts = value.split(',');
+    var file = parts[0];
+    var index = $(field).find(":selected").data("index");
+    var data = code_hooks[file][index];
+
+    var params = data.params.split(',');
     for (var i=0; i<params.length; i++) {
       paramsHTML += "<div class=\"blue\">$" + params[i] + "</div>";
     }
-    var vals = code_hooks[func].overridable;
+    var vals = data.overridable.split(',');
     for (var i=0; i<vals.length; i++) {
       valsHTML += "<div class=\"blue\">$" + vals[i] + "</div>";
     }
@@ -21,7 +27,8 @@ hm.select_hook = function(func) {
 
   $("#code_hook_params").html(paramsHTML);
   $("#code_hook_overridable_values").html(valsHTML);
-}
+};
+
 
 hm.select_hook_type = function(hook_type) {
   if (hook_type == hm.current_code_hook_type) {
@@ -30,14 +37,14 @@ hm.select_hook_type = function(hook_type) {
   $("#" + hm.current_code_hook_type + "_hook_fields").hide(300);
   setTimeout(function() { $("#" + hook_type + "_hook_fields").show(300); }, 300);
 	hm.current_code_hook_type = hook_type;
-}
+};
 
 hm.init_page = function() {
   if (hm.current_code_hook_type == "code") {
-	  hm.select_hook($("#code_hook_dropdown").val());
+	  hm.select_hook($("#code_hook_dropdown")[0]);
 	}
 	hm.generate_custom_hook();
-}
+};
 
 hm.add_rule_init = function() {
   if ($("#ht2").attr("checked")) {
@@ -47,7 +54,7 @@ hm.add_rule_init = function() {
 	  hm.select_hook_type("custom");
   }
   hm.generate_custom_hook();
-}
+};
 
 hm.generate_custom_hook = function() {
   var custom_hook_name = $("#custom_hook").val();
@@ -56,4 +63,4 @@ hm.generate_custom_hook = function() {
 	  str = "{template_hook location=\"" + $("#custom_hook").val() + "\"}";
 	}
 	$("#custom_hook_smarty_code").html(str);
-}
+};
