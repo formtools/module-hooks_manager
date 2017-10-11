@@ -30,8 +30,6 @@ $template_hooks = Rules::groupHooksByFile("template_hooks", $hook_info["template
 $js_code_hooks = "var code_hooks = " . json_encode($code_hooks);
 $js_template_hooks = "var template_hooks = " . json_encode($template_hooks);
 
-print_r($rule_info);
-
 $page_vars = array(
     "g_success" => $success,
     "g_message" => $message,

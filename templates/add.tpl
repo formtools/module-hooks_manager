@@ -65,7 +65,7 @@
             {foreach from=$code_hooks key=file item=file_hooks name=files}
               <optgroup label="{$file}">
                   {foreach from=$file_hooks item=row name=file_hooks}
-                      <option value="{$file},{$row.function_name},{$row.action_location}"
+                      <option value="{$row.function_name},{$row.action_location}"
                          data-index="{$smarty.foreach.file_hooks.index}">{$row.function_name}, {$row.action_location}</option>
                   {/foreach}
               </optgroup>

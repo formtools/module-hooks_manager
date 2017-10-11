@@ -1,5 +1,4 @@
 {include file='modules_header.tpl'}
-
   <table cellpadding="0" cellspacing="0">
   <tr>
     <td width="45"><a href="index.php"><img src="images/icon.gif" border="0" width="34" height="34" /></a></td>
@@ -66,25 +65,7 @@
               {foreach from=$code_hooks key=file item=file_hooks name=files}
                   <optgroup label="{$file}">
                       {foreach from=$file_hooks item=row name=file_hooks}
-
-                          <!--
-                          [hook_id] => 83
-                          [is_custom_hook] => no
-                          [status] => enabled
-                          [rule_name] => One
-                          [code] =>
-                          [hook_code_type] => na
-                          [hook_type] => code
-                          [action_location] => getFormField
-                          [module_folder] => hooks_manager
-                          [function_name] => /global/code/Fields.class.php
-                          [hook_function] => hm_parse_code_hook
-                          [priority] => 50
-                          -->
-
-                          {if $rule_info.function_name == $hook.function_name && $rule_info.action_location == $hook.action_location}selected{/if}
-
-                          <option value="{$file},{$row.function_name},{$row.action_location}" data-index="{$smarty.foreach.file_hooks.index}">{$row.function_name}, {$row.action_location}</option>
+                          <option value="{$row.function_name},{$row.action_location}" data-index="{$smarty.foreach.file_hooks.index}" {if $rule_info.function_name == $row.function_name && $rule_info.action_location == $row.action_location}selected{/if}>{$row.function_name}, {$row.action_location}</option>
                       {/foreach}
                   </optgroup>
               {/foreach}

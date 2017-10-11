@@ -123,12 +123,12 @@ class Rules
     {
         $db = Core::$db;
 
-        // the code hook dropdown contains the hook name, a comma, then the location where it's call (e.g. "start", "end" etc.)
-        list ($hook_name, $location) = mb_split(",", $info["code_hook_dropdown"]);
+        // the code hook dropdown contains the function name, a comma, then the location where it's call (e.g. "start", "end" etc.)
+        list ($function_name, $location) = mb_split(",", $info["code_hook_dropdown"]);
 
         // register our new rule for this hook
-        list ($success, $hook_id) = Hooks::registerHook("code", "hooks_manager", $location, $hook_name,
-            "hm_parse_code_hook", $info["priority"], false);
+        list ($success, $hook_id) = Hooks::registerHook("code", "hooks_manager", $location, $function_name,
+            "parseCodeHook", $info["priority"]);
 
         if (!$success) {
             return array(false, $L["notify_rule_not_added"]);
@@ -332,7 +332,7 @@ class Rules
         // the code hook dropdown contains the hook name, a comma, then the location where it's call (e.g. "start", "end" etc.)
         list ($hook_name, $location) = explode(",", $info["code_hook_dropdown"]);
         list ($success, $hook_id) = Hooks::registerHook("code", "hooks_manager", $location, $hook_name,
-            "hm_parse_code_hook", $priority, false);
+            "parseCodeHook", $priority, false);
 
         try {
             $db->query("

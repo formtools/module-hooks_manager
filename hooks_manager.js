@@ -10,9 +10,11 @@ hm.select_hook = function(field) {
     paramsHTML = "&#8212;";
     valsHTML   = "&#8212;";
   } else {
+    var selectedOption = $(field).find(":selected");
+    var index = selectedOption.data("index");
+    var file = selectedOption.closest("optgroup").attr("label");
+
     var parts = value.split(',');
-    var file = parts[0];
-    var index = $(field).find(":selected").data("index");
     var data = code_hooks[file][index];
 
     var params = data.params.split(',');
