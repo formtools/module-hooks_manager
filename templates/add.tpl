@@ -118,14 +118,14 @@
           <td>
             <select name="template_hook_dropdown">
               <option value="">{$LANG.phrase_please_select}</option>
-              {foreach from=$template_hooks item=hook name=row}
-              <optgroup label="{$file}">
-                  {foreach from=$file_hooks item=row}
-                      <option value="{$row.function_name},{$row.action_location}">{$row.function_name}, {$row.action_location}</option>
-                  {/foreach}
-              </optgroup>
-              {/foreach}
-            </select>
+                {foreach from=$template_hooks key=file item=file_hooks name=files}
+                    <optgroup label="{$file}">
+                        {foreach from=$file_hooks item=row name=file_hooks}
+                            <option value="{$row.action_location}" data-index="{$smarty.foreach.file_hooks.index}">{$row.action_location}</option>
+                        {/foreach}
+                    </optgroup>
+                {/foreach}
+              </select>
           </td>
         </tr>
         <tr>

@@ -327,6 +327,7 @@ class Rules
 
         $priority = $info["priority"];
 
+        // hook calls only contains live hooks.
         Hooks::deleteHookCall($current_hook_id);
 
         // the code hook dropdown contains the hook name, a comma, then the location where it's call (e.g. "start", "end" etc.)
@@ -353,6 +354,7 @@ class Rules
                 "current_hook_id" => $current_hook_id
             ));
             $db->execute();
+
             return array(true, $L["notify_rule_updated"], $hook_id);
         } catch (PDOException $e) {
             return array(false, $L["notify_rule_not_updated"] . $e->getMessage(), "");
@@ -494,37 +496,6 @@ class Rules
 
 
     /**
-     * The parser function for code hooks. This is called whenever a page contains a hook
-     * that has a rule (or rules) defined for it within the Hooks Manager.
-     */
-    public static function parseCodeHook($vars)
-    {
-        // place all variables that have been explicitly passed to this hook as defined in this
-        // scope (e.g. $vars["account_id"] becomes $account_id). This is for the sake of the
-        // developer using the Hooks Manager UI
-        $passed_vars = $vars;
-        $overridable_vars = $vars["form_tools_overridable_vars"];
-
-        unset($passed_vars["form_tools_hook_info"]);
-        unset($passed_vars["form_tools_overridable_vars"]);
-        unset($passed_vars["form_tools_calling_function"]);
-
-        extract($passed_vars);
-        $hook_info = self::getRule($vars["form_tools_hook_info"]["hook_id"]);
-
-        eval($hook_info["code"]);
-
-        // return the overridable values
-        $hooks_manager_return_hash = array();
-        foreach ($overridable_vars as $var) {
-            $hooks_manager_return_hash[$var] = $$var;
-        }
-
-        return $hooks_manager_return_hash;
-    }
-
-
-    /**
      * This function retrieves and parses out all hook data from the hooks table.
      *
      * @return array a hash with keys "code_hooks" and "template_hooks"
@@ -542,7 +513,7 @@ class Rules
             if ($row["hook_type"] == "code") {
                 $code_hooks[$row["function_name"] . ", " . $row["action_location"]] = $row;
             } else {
-                $template_hooks[$row["function_name"] . ", " . $row["action_location"]] = $row;
+                $template_hooks[] = $row;
             }
         }
 
@@ -555,10 +526,10 @@ class Rules
         );
     }
 
-    public static function groupHooksByFile($js_var_name, $hook_info)
+    public static function groupHooksByFile($hook_info)
     {
         $grouped_by_file = array();
-        // convert ALL form and View info into Javascript, for use in the page
+
         foreach ($hook_info as $hook_data) {
             $file = $hook_data["filepath"];
 

@@ -77,4 +77,42 @@ class Module extends FormToolsModule
 
         return array(true, "");
     }
+
+
+    /**
+     * The parser function for code hooks. This is called whenever a page contains a hook
+     * that has a rule (or rules) defined for it within the Hooks Manager.
+     */
+    public function parseCodeHook($vars)
+    {
+        // place all variables that have been explicitly passed to this hook as defined in this
+        // scope (e.g. $vars["account_id"] becomes $account_id). This is for the sake of the
+        // developer using the Hooks Manager UI
+        $passed_vars = $vars;
+        $overridable_vars = $vars["form_tools_overridable_vars"];
+
+        unset($passed_vars["form_tools_hook_info"]);
+        unset($passed_vars["form_tools_overridable_vars"]);
+        unset($passed_vars["form_tools_calling_function"]);
+
+        extract($passed_vars);
+        $hook_info = Rules::getRule($vars["form_tools_hook_info"]["hook_id"]);
+
+        if ($hook_info["status"] === "disabled") {
+            return array(); // $overridable_vars;
+        }
+
+        eval($hook_info["code"]);
+
+        // return the overridable values
+        $hooks_manager_return_hash = array();
+        foreach ($overridable_vars as $var) {
+            if (isset($$var)) {
+                $hooks_manager_return_hash[$var] = $$var;
+            }
+        }
+
+        return $hooks_manager_return_hash;
+    }
+
 }
