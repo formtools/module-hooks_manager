@@ -162,15 +162,13 @@ class Rules
      *
      * @param array $info
      */
-    private function addTemplateRule($info, $L)
+    private static function addTemplateRule($info, $L)
     {
         $db = Core::$db;
 
-        $hook_name = $info["template_hook_dropdown"];
+        $action_location = $info["template_hook_dropdown"];
 
-        list ($success, $hook_id) = Hooks::registerHook("template", "hooks_manager", $hook_name, "",
-            "hm_parse_template_hook", $info["priority"], false);
-
+        list ($success, $hook_id) = Hooks::registerHook("template", "hooks_manager", $action_location, "", "parseTemplateHook", $info["priority"]);
         if (!$success) {
             return array(false, $L["notify_rule_not_added"]);
         }
@@ -191,7 +189,7 @@ class Rules
             ));
             $db->execute();
 
-            return array(true, $L["notify_rule_added"], $db->getInsertId());
+            return array(true, $L["notify_rule_added"], $hook_id);
         } catch (PDOException $e) {
             return array(false, $L["notify_rule_not_added"] . $e->getMessage(), "");
         }
@@ -208,16 +206,9 @@ class Rules
     {
         $db = Core::$db;
 
-        $status = $info["status"];
-        $rule_name = $info["rule_name"];
-        $hook_name = $info["custom_hook"];
-        $code = $info["custom_hook_code"];
-        $hook_code_type = $info["custom_hook_code_type"];
-
         // custom rules are stored as template hooks in the main hooks table. Right now I don't see any point to a "code" custom hook...
         // at this stage, the only real use for custom hooks is in conjunction with the Pages module, which will be template hooks only
-        list ($success, $hook_id) = Hooks::registerHook("template", "hooks_manager", $hook_name, "",
-            "hm_parse_template_hook", $info["priority"], false);
+        list ($success, $hook_id) = Hooks::registerHook("template", "hooks_manager", $info["custom_hook"], "", "parseTemplateHook", $info["priority"]);
 
         if (!$success) {
             return array(false, $L["notify_rule_not_added"]);
@@ -227,18 +218,18 @@ class Rules
         try {
             $db->query("
                 INSERT INTO {PREFIX}module_hooks_manager_rules (hook_id, is_custom_hook, status, rule_name, code, hook_code_type)
-                VALUES (:hook_id, :is_custom_hook, '$status', '$rule_name', '$code', '$hook_code_type')
+                VALUES (:hook_id, :is_custom_hook, :status, :rule_name, :code, :hook_code_type)
             ");
             $db->bindAll(array(
                 "hook_id" => $hook_id,
                 "is_custom_hook" => "yes",
                 "status" => $info["status"],
                 "rule_name" => $info["rule_name"],
-                "code" => $info["template_hook_code"],
-                "hook_code_type" => $info["template_hook_code_type"]
+                "code" => $info["custom_hook_code"],
+                "hook_code_type" => $info["custom_hook_code_type"]
             ));
             $db->execute();
-            return array(true, $L["notify_rule_added"], $db->getInsertId());
+            return array(true, $L["notify_rule_added"], $hook_id);
         } catch (PDOException $e) {
             return array(false, $L["notify_rule_not_added"] . $e->getMessage(), "");
         }
@@ -325,15 +316,12 @@ class Rules
     {
         $db = Core::$db;
 
-        $priority = $info["priority"];
-
         // hook calls only contains live hooks.
         Hooks::deleteHookCall($current_hook_id);
 
         // the code hook dropdown contains the hook name, a comma, then the location where it's call (e.g. "start", "end" etc.)
         list ($hook_name, $location) = explode(",", $info["code_hook_dropdown"]);
-        list ($success, $hook_id) = Hooks::registerHook("code", "hooks_manager", $location, $hook_name,
-            "parseCodeHook", $priority, false);
+        list ($success, $hook_id) = Hooks::registerHook("code", "hooks_manager", $location, $hook_name, "parseCodeHook", $info["priority"], false);
 
         try {
             $db->query("
@@ -366,14 +354,11 @@ class Rules
     {
         $db = Core::$db;
 
-        $priority = $info["priority"];
-
         Hooks::deleteHookCall($current_hook_id);
 
         // the code hook dropdown contains the hook name, a comma, then the location where it's call (e.g. "start", "end" etc.)
-        $hook_name = $info["template_hook_dropdown"];
-        list ($success, $hook_id) = Hooks::registerHook("template", "hooks_manager", $hook_name, "",
-            "hm_parse_template_hook", $priority, false);
+        $action_location = $info["template_hook_dropdown"];
+        list ($success, $hook_id) = Hooks::registerHook("template", "hooks_manager", $action_location, "", "parseTemplateHook", $info["priority"]);
 
         try {
             $db->query("
@@ -395,6 +380,8 @@ class Rules
                 "hook_code_type" => $info["template_hook_code_type"],
                 "current_hook_id" => $current_hook_id
             ));
+            $db->execute();
+
             return array(true, $L["notify_rule_updated"], $hook_id);
         } catch (PDOException $e) {
             return array(false, $L["notify_rule_not_updated"] . $e->getMessage(), "");
@@ -411,8 +398,7 @@ class Rules
         Hooks::deleteHookCall($current_hook_id);
 
         // the code hook dropdown contains the hook name, a comma, then the location where it's call (e.g. "start", "end" etc.)
-        list ($success, $hook_id) = Hooks::registerHook("template", "hooks_manager", $hook_name, "",
-            "hm_parse_template_hook", $info["priority"], false);
+        list ($success, $hook_id) = Hooks::registerHook("template", "hooks_manager", $hook_name, "", "parseTemplateHook", $info["priority"]);
 
         try {
             $db->query("
@@ -430,10 +416,12 @@ class Rules
                 "is_custom_hook" => "yes",
                 "status" => $info["status"],
                 "rule_name" => $info["rule_name"],
-                "code" => $info["template_hook_code"],
-                "hook_code_type" => $info["template_hook_code_type"],
+                "code" => $info["custom_hook_code"],
+                "hook_code_type" => $info["custom_hook_code_type"],
                 "current_hook_id" => $current_hook_id
             ));
+            $db->execute();
+
             return array(true, $L["notify_rule_updated"], $hook_id);
         } catch (PDOException $e) {
             return array(false, $L["notify_rule_not_updated"] . $e->getMessage(), "");
@@ -459,39 +447,6 @@ class Rules
         $db->execute();
 
         return $db->fetchAll();
-    }
-
-
-    /**
-     * The parser function for template hooks. This is called whenever a page contains a hook
-     * that has a rule (or rules) defined for it within the Hooks Manager.
-     */
-    public static function parseTemplateHook($location, $template_vars)
-    {
-        $hook_info = $template_vars["form_tools_hook_info"];
-        $hook_id = $hook_info["hook_id"];
-
-        // now get the FULL hook info (i.e. with the Hook Manager info)
-        $hook_info = self::getRule($hook_id);
-
-        // if this hook is disabled, do nothing
-        if ($hook_info["status"] != "enabled") {
-            return;
-        }
-
-        switch ($hook_info["hook_code_type"]) {
-            case "html":
-                echo $hook_info["code"];
-                break;
-
-            case "php":
-                eval($hook_info["code"]);
-                break;
-
-            case "smarty":
-                echo General::evalSmartyString($hook_info["code"]);
-                break;
-        }
     }
 
 

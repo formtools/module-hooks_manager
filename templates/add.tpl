@@ -80,7 +80,7 @@
             <textarea name="code_hook_code" id="code_hook_code" style="width:100%; height:240px"></textarea>
           </div>
           <script>
-          var html_editor = new CodeMirror.fromTextArea("code_hook_code", {literal}{{/literal}
+          var code_html_editor = new CodeMirror.fromTextArea("code_hook_code", {literal}{{/literal}
           parserfile: ["parsejavascript.js", "tokenizejavascript.js"],
           path: "{$g_root_url}/global/codemirror/js/",
           stylesheet: "{$g_root_url}/global/codemirror/css/jscolors.css"
@@ -131,7 +131,7 @@
         <tr>
           <td>{$L.phrase_content_type}</td>
           <td>
-            <input type="radio" name="template_hook_code_type" value="html" id="thct1" />
+            <input type="radio" name="template_hook_code_type" value="html" id="thct1" checked="checked" />
               <label for="thct1">{$LANG.word_html}</label>
             <input type="radio" name="template_hook_code_type" value="php" id="thct2" />
               <label for="thct2">{$L.word_php}</label>
@@ -146,7 +146,7 @@
               <textarea name="template_hook_code" id="template_hook_code" style="width:100%; height:240px"></textarea>
             </div>
             <script>
-            var html_editor = new CodeMirror.fromTextArea("template_hook_code", {literal}{{/literal}
+            var template_html_editor = new CodeMirror.fromTextArea("template_hook_code", {literal}{{/literal}
             parserfile: ["parsejavascript.js", "tokenizejavascript.js"],
             path: "{$g_root_url}/global/codemirror/js/",
             stylesheet: "{$g_root_url}/global/codemirror/css/jscolors.css"
@@ -182,7 +182,7 @@
         <tr>
           <td>{$L.phrase_content_type}</td>
           <td>
-            <input type="radio" name="custom_hook_code_type" value="html" id="chct1" />
+            <input type="radio" name="custom_hook_code_type" value="html" id="chct1" checked="checked" />
               <label for="chct1">{$LANG.word_html}</label>
             <input type="radio" name="custom_hook_code_type" value="php" id="chct2" />
               <label for="chct2">{$L.word_php}</label>
@@ -197,7 +197,7 @@
               <textarea name="custom_hook_code" id="custom_hook_code" style="width:100%; height:240px"></textarea>
             </div>
             <script type="text/javascript">
-            var html_editor = new CodeMirror.fromTextArea("custom_hook_code", {literal}{{/literal}
+            var custom_html_editor = new CodeMirror.fromTextArea("custom_hook_code", {literal}{{/literal}
             parserfile: ["parsejavascript.js", "tokenizejavascript.js"],
             path: "{$g_root_url}/global/codemirror/js/",
             stylesheet: "{$g_root_url}/global/codemirror/css/jscolors.css"

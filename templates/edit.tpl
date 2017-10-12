@@ -45,11 +45,14 @@
     <tr>
       <td>{$L.phrase_hook_type}</td>
       <td>
-        <input type="radio" name="hook_type" value="code" id="ht1" {if $rule_info.is_custom_hook == "no" && $rule_info.hook_type == "code"}checked{/if} />
+        <input type="radio" name="hook_type" value="code" id="ht1"
+            {if $rule_info.is_custom_hook == "no" && $rule_info.hook_type == "code"}checked="checked"{/if} />
           <label for="ht1">{$L.phrase_code_hook}</label>
-        <input type="radio" name="hook_type" value="template" id="ht2" {if $rule_info.is_custom_hook == "no" && $rule_info.hook_type == "template"}checked{/if}" />
+        <input type="radio" name="hook_type" value="template" id="ht2"
+            {if $rule_info.is_custom_hook == "no" && $rule_info.hook_type == "template"}checked="checked"{/if}" />
           <label for="ht2">{$L.phrase_template_hook}</label>
-        <input type="radio" name="hook_type" value="custom" id="ht3" {if $rule_info.is_custom_hook == "yes"}checked{/if}  />
+        <input type="radio" name="hook_type" value="custom" id="ht3"
+            {if $rule_info.is_custom_hook == "yes"}checked="checked"{/if}  />
           <label for="ht3">{$L.phrase_custom_hook}</label>
       </td>
     </tr>
@@ -115,10 +118,15 @@
           <td width="120" valign="top">{$L.phrase_template_hook}</td>
           <td>
             <select name="template_hook_dropdown">
-              <option value="">{$LANG.phrase_please_select}</option>
-              {foreach from=$template_hooks item=hook name=row}
-                <option value="{$hook.action_location}" {if $rule_info.action_location == $hook.action_location}selected{/if}>{$hook.filepath} - {$hook.action_location}</option>
-              {/foreach}
+                <option value="">{$LANG.phrase_please_select}</option>
+                {foreach from=$template_hooks key=file item=file_hooks name=files}
+                    <optgroup label="{$file}">
+                        {foreach from=$file_hooks item=row name=file_hooks}
+                            <option value="{$row.action_location}" {if $rule_info.action_location === $row.action_location}selected="selected"{/if}
+                                data-index="{$smarty.foreach.file_hooks.index}">{$row.action_location}</option>
+                        {/foreach}
+                    </optgroup>
+                {/foreach}
             </select>
           </td>
         </tr>

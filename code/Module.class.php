@@ -4,6 +4,7 @@
 namespace FormTools\Modules\HooksManager;
 
 use FormTools\Core;
+use FormTools\General as CoreGeneral;
 use FormTools\Module as FormToolsModule;
 use PDOException;
 
@@ -113,6 +114,39 @@ class Module extends FormToolsModule
         }
 
         return $hooks_manager_return_hash;
+    }
+
+
+    /**
+     * The parser function for template hooks. This is called whenever a page contains a hook
+     * that has a rule (or rules) defined for it within the Hooks Manager.
+     */
+    public static function parseTemplateHook($location, $template_vars)
+    {
+        $hook_info = $template_vars["form_tools_hook_info"];
+        $hook_id = $hook_info["hook_id"];
+
+        // now get the FULL hook info (i.e. with the Hook Manager info)
+        $hook_info = Rules::getRule($hook_id);
+
+        // if this hook is disabled, do nothing
+        if ($hook_info["status"] != "enabled") {
+            return;
+        }
+
+        switch ($hook_info["hook_code_type"]) {
+            case "html":
+                echo $hook_info["code"];
+                break;
+
+            case "php":
+                eval($hook_info["code"]);
+                break;
+
+            case "smarty":
+                echo CoreGeneral::evalSmartyString($hook_info["code"]);
+                break;
+        }
     }
 
 }
