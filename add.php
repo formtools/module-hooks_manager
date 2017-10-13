@@ -35,7 +35,11 @@ rules.push("if:hook_type=custom,required,custom_hook,{$L["validation_no_custom_h
 rules.push("if:hook_type=custom,reg_exp,custom_hook,^[a-zA-Z0-9_]+$,{$L["validation_invalid_custom_hook_name"]}");
 rules.push("if:hook_type=custom,required,custom_hook_code_type,{$L["validation_no_content_type"]}");
 
-$(function() { hm.add_rule_init(); });
+if (hm === undefined) {
+  var hm = {};
+}
+hm.current_code_hook_type = "code";
+$(hm.init_page);
 EOF;
 
 $module->displayPage("templates/add.tpl", $page_vars);

@@ -82,10 +82,8 @@
             <textarea name="code_hook_code" id="code_hook_code" style="width:100%; height:240px">{$rule_info.code}</textarea>
           </div>
           <script>
-          var html_editor = new CodeMirror.fromTextArea("code_hook_code", {literal}{{/literal}
-          parserfile: ["parsejavascript.js", "tokenizejavascript.js"],
-          path: "{$g_root_url}/global/codemirror/js/",
-          stylesheet: "{$g_root_url}/global/codemirror/css/jscolors.css"
+          var html_editor = new CodeMirror.fromTextArea(document.getElementById("code_hook_code"), {literal}{{/literal}
+              mode: "xml"
           {literal}});{/literal}
           </script>
           <table cellspacing="1" cellpadding="0" width="100%" class="hook_param_table">
@@ -148,10 +146,8 @@
               <textarea name="template_hook_code" id="template_hook_code" style="width:100%; height:240px">{$rule_info.code}</textarea>
             </div>
             <script>
-            var html_editor = new CodeMirror.fromTextArea("template_hook_code", {literal}{{/literal}
-            parserfile: ["parsejavascript.js", "tokenizejavascript.js"],
-            path: "{$g_root_url}/global/codemirror/js/",
-            stylesheet: "{$g_root_url}/global/codemirror/css/jscolors.css"
+            var html_editor = new CodeMirror.fromTextArea(document.getElementById("template_hook_code"), {literal}{{/literal}
+                mode: "xml"
             {literal}});{/literal}
             </script>
           </td>
@@ -193,16 +189,14 @@
           </td>
         </tr>
         <tr>
-          <td valign="top">{$L.phrase_php_code}</td>
+          <td valign="top">{$LANG.word_content}</td>
           <td>
             <div style="border: 1px solid #666666; background: #ffffff; padding: 3px">
               <textarea name="custom_hook_code" id="custom_hook_code" style="width:100%; height:240px">{$rule_info.code}</textarea>
             </div>
             <script>
-            var html_editor = new CodeMirror.fromTextArea("custom_hook_code", {literal}{{/literal}
-            parserfile: ["parsejavascript.js", "tokenizejavascript.js"],
-            path: "{$g_root_url}/global/codemirror/js/",
-            stylesheet: "{$g_root_url}/global/codemirror/css/jscolors.css"
+            var html_editor = new CodeMirror.fromTextArea(document.getElementById("custom_hook_code"), {literal}{{/literal}
+                mode: "javascript"
             {literal}});{/literal}
             </script>
           </td>

@@ -41,22 +41,39 @@ hm.select_hook_type = function(hook_type) {
 	hm.current_code_hook_type = hook_type;
 };
 
+hm.select_content_type = function () {
+
+};
+
 hm.init_page = function() {
   if (hm.current_code_hook_type == "code") {
 	  hm.select_hook($("#code_hook_dropdown")[0]);
 	}
 	hm.generate_custom_hook();
+
+  $("input[name=hook_type]").bind("change", function() {
+    hm.select_hook_type(this.value);
+  });
+  $("input[name=template_hook_code_type]").bind("change", function () {
+
+  });
+  $("input[custom_hook_code_type]").bind("change", function () {
+
+  });
 };
 
-hm.add_rule_init = function() {
-  if ($("#ht2").attr("checked")) {
-	  hm.select_hook_type("template");
-  }
-  if ($("#ht3").attr("checked")) {
-	  hm.select_hook_type("custom");
-  }
-  hm.generate_custom_hook();
-};
+//hm.add_rule_init = function() {
+//  $("input[name=hook_type]").bind("change", function() {
+//    hm.select_hook_type(this.value);
+//  });
+//  if ($("#ht2").attr("checked")) {
+//	  hm.select_hook_type("template");
+//  }
+//  if ($("#ht3").attr("checked")) {
+//	  hm.select_hook_type("custom");
+//  }
+////  hm.generate_custom_hook();
+//};
 
 hm.generate_custom_hook = function() {
   var custom_hook_name = $("#custom_hook").val();

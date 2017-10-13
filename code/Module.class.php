@@ -17,12 +17,18 @@ class Module extends FormToolsModule
     protected $authorEmail = "ben.keen@gmail.com";
     protected $authorLink = "https://formtools.org";
     protected $version = "2.0.0";
-    protected $date = "2017-10-08";
+    protected $date = "2017-10-12";
     protected $originLanguage = "en_us";
-    protected $cssFiles = array("styles.css");
+    protected $cssFiles = array(
+        "{MODULEROOT}/styles.css",
+        "{FTROOT}/global/codemirror/lib/codemirror.css"
+    );
     protected $jsFiles = array(
         "{MODULEROOT}/hooks_manager.js",
-        "{FTROOT}/global/codemirror/js/codemirror.js"
+        "{FTROOT}/global/codemirror/lib/codemirror.js",
+        "{FTROOT}/global/codemirror/mode/xml/xml.js",
+        "{FTROOT}/global/codemirror/mode/smarty/smarty.js",
+        "{FTROOT}/global/codemirror/mode/php/php.js"
     );
 
     protected $nav = array(

@@ -56,11 +56,8 @@ if (hm === undefined) {
   var hm = {};
 }
 hm.current_code_hook_type = "{$rule_info["hook_type"]}";
+$(hm.init_page);
 
-$(function() {
-  hm.init_page();
-  $("input[name=hook_type]").bind("change", function() { hm.select_hook_type(this.value); });
-});
 EOF;
 
 $module->displayPage("templates/edit.tpl", $page_vars);
