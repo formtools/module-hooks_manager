@@ -34,7 +34,6 @@ hm.select_hook_type = function(hook_type) {
   if (hook_type == hm.current_code_hook_type) {
 	  return;
   }
-  console.log(hm.current_code_hook_type);
   $("#" + hm.current_code_hook_type + "_hook_fields").hide();
   $("#" + hook_type + "_hook_fields").show();
 	hm.current_code_hook_type = hook_type;
@@ -76,11 +75,8 @@ hm.init_page = function() {
   hm.setMode(template_html_editor, $("input[name=template_hook_code_type]:checked").val());
   hm.setMode(custom_html_editor, $("input[name=custom_hook_code_type]:checked").val());
 
-  console.log(hm.current_code_hook_type);
-
   // trigger the select hook option. That ensures the
   if (hm.current_code_hook_type === 'code') {
-    console.log('..');
     hm.select_hook(document.getElementById('code_hook_dropdown'));
   }
 };
