@@ -149,7 +149,7 @@ class Rules
             ));
             $db->execute();
 
-            return array(true, $L["notify_rule_added"], $db->getInsertId());
+            return array(true, $L["notify_rule_added"], $hook_id);
         } catch (PDOException $e) {
             return array(false, $L["notify_rule_not_added"] . $e->getMessage(), "");
         }

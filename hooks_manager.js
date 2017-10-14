@@ -13,8 +13,6 @@ hm.select_hook = function(field) {
     var selectedOption = $(field).find(":selected");
     var index = selectedOption.data("index");
     var file = selectedOption.closest("optgroup").attr("label");
-
-    var parts = value.split(',');
     var data = code_hooks[file][index];
 
     var params = data.params.split(',');
@@ -36,13 +34,27 @@ hm.select_hook_type = function(hook_type) {
   if (hook_type == hm.current_code_hook_type) {
 	  return;
   }
-  $("#" + hm.current_code_hook_type + "_hook_fields").hide(300);
-  setTimeout(function() { $("#" + hook_type + "_hook_fields").show(300); }, 300);
+  console.log(hm.current_code_hook_type);
+  $("#" + hm.current_code_hook_type + "_hook_fields").hide();
+  $("#" + hook_type + "_hook_fields").show();
 	hm.current_code_hook_type = hook_type;
+
+	if (hook_type === 'template') {
+	  template_html_editor.refresh();
+  } else if (hook_type === 'custom') {
+    custom_html_editor.refresh();
+  } else {
+    html_editor.refresh();
+  }
 };
 
-hm.select_content_type = function () {
-
+hm.generate_custom_hook = function() {
+  var custom_hook_name = $("#custom_hook").val();
+  var str = "&#8212;";
+  if (custom_hook_name) {
+    str = "{template_hook location=\"" + $("#custom_hook").val() + "\"}";
+  }
+  $("#custom_hook_smarty_code").html(str);
 };
 
 hm.init_page = function() {
@@ -55,31 +67,30 @@ hm.init_page = function() {
     hm.select_hook_type(this.value);
   });
   $("input[name=template_hook_code_type]").bind("change", function () {
-
+    hm.setMode(template_html_editor, this.value);
   });
-  $("input[custom_hook_code_type]").bind("change", function () {
-
+  $("input[name=custom_hook_code_type]").bind("change", function () {
+    hm.setMode(custom_html_editor, this.value);
   });
+
+  hm.setMode(template_html_editor, $("input[name=template_hook_code_type]:checked").val());
+  hm.setMode(custom_html_editor, $("input[name=custom_hook_code_type]:checked").val());
+
+  console.log(hm.current_code_hook_type);
+
+  // trigger the select hook option. That ensures the
+  if (hm.current_code_hook_type === 'code') {
+    console.log('..');
+    hm.select_hook(document.getElementById('code_hook_dropdown'));
+  }
 };
 
-//hm.add_rule_init = function() {
-//  $("input[name=hook_type]").bind("change", function() {
-//    hm.select_hook_type(this.value);
-//  });
-//  if ($("#ht2").attr("checked")) {
-//	  hm.select_hook_type("template");
-//  }
-//  if ($("#ht3").attr("checked")) {
-//	  hm.select_hook_type("custom");
-//  }
-////  hm.generate_custom_hook();
-//};
 
-hm.generate_custom_hook = function() {
-  var custom_hook_name = $("#custom_hook").val();
-	var str = "&#8212;";
-	if (custom_hook_name) {
-	  str = "{template_hook location=\"" + $("#custom_hook").val() + "\"}";
-	}
-	$("#custom_hook_smarty_code").html(str);
+hm.setMode = function(editor, value) {
+  var map = {
+    html: 'xml',
+    php: 'text/x-php',
+    smarty: 'smarty'
+  };
+  editor.setOption('mode', map[value]);
 };

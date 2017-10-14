@@ -10,11 +10,15 @@ $module = Modules::initModulePage("admin");
 $LANG = Core::$L;
 $L = $module->getLangStrings();
 
+$success = true;
+$message = "";
 if (isset($_POST["update"])) {
-    list ($g_success, $g_message) = Rules::updateSettings($_POST, $L);
+    list ($success, $message) = Rules::updateSettings($_POST, $L);
 }
 
 $page_vars = array(
+    "g_success" => $success,
+    "g_message" => $message,
     "num_rules_per_page" => Modules::getModuleSettings("num_rules_per_page")
 );
 

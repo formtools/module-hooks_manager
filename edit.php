@@ -30,6 +30,11 @@ $template_hooks = Rules::groupHooksByFile($hook_info["template_hooks"]);
 $js_code_hooks = "var code_hooks = " . json_encode($code_hooks);
 $js_template_hooks = "var template_hooks = " . json_encode($template_hooks);
 
+$hook_type = $rule_info["hook_type"];
+if ($rule_info["is_custom_hook"] == "yes") {
+    $hook_type = "custom";
+}
+
 $page_vars = array(
     "g_success" => $success,
     "g_message" => $message,
@@ -55,9 +60,8 @@ rules.push("if:hook_type=custom,required,custom_hook_code_type,{$L["validation_n
 if (hm === undefined) {
   var hm = {};
 }
-hm.current_code_hook_type = "{$rule_info["hook_type"]}";
+hm.current_code_hook_type = "$hook_type";
 $(hm.init_page);
-
 EOF;
 
 $module->displayPage("templates/edit.tpl", $page_vars);

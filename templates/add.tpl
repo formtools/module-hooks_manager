@@ -29,7 +29,7 @@
     </tr>
     <tr>
       <td>{$L.phrase_rule_name}</td>
-      <td><input type="text" name="rule_name" value="" style="width:100%" maxlength="255" /></td>
+      <td><input type="text" name="rule_name" value="" style="width:100%" maxlength="255" autofocus /></td>
     </tr>
     <tr>
       <td>{$L.word_priority}</td>
@@ -80,8 +80,8 @@
             <textarea name="code_hook_code" id="code_hook_code" style="width:100%; height:240px"></textarea>
           </div>
           <script>
-          var code_html_editor = new CodeMirror.fromTextArea(document.getElementById("code_hook_code"), {literal}{{/literal}
-          mode: "javascript"
+          var html_editor = new CodeMirror.fromTextArea(document.getElementById("code_hook_code"), {literal}{{/literal}
+            mode: "text/x-php"
           {literal}});{/literal}
           </script>
           <table cellspacing="1" cellpadding="0" width="100%" class="hook_param_table">
@@ -145,7 +145,7 @@
             </div>
             <script>
             var template_html_editor = new CodeMirror.fromTextArea(document.getElementById("template_hook_code"), {literal}{{/literal}
-                mode: "javascript"
+              mode: "xml"
             {literal}});{/literal}
             </script>
           </td>
@@ -194,7 +194,7 @@
             </div>
             <script type="text/javascript">
             var custom_html_editor = new CodeMirror.fromTextArea(document.getElementById("custom_hook_code"), {literal}{{/literal}
-            mode: "javascript"
+                mode: "xml"
             {literal}});{/literal}
             </script>
           </td>

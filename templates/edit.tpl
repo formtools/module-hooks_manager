@@ -83,7 +83,7 @@
           </div>
           <script>
           var html_editor = new CodeMirror.fromTextArea(document.getElementById("code_hook_code"), {literal}{{/literal}
-              mode: "xml"
+              mode: "text/x-php"
           {literal}});{/literal}
           </script>
           <table cellspacing="1" cellpadding="0" width="100%" class="hook_param_table">
@@ -146,8 +146,8 @@
               <textarea name="template_hook_code" id="template_hook_code" style="width:100%; height:240px">{$rule_info.code}</textarea>
             </div>
             <script>
-            var html_editor = new CodeMirror.fromTextArea(document.getElementById("template_hook_code"), {literal}{{/literal}
-                mode: "xml"
+            var template_html_editor = new CodeMirror.fromTextArea(document.getElementById("template_hook_code"), {literal}{{/literal}
+              mode: "xml",
             {literal}});{/literal}
             </script>
           </td>
@@ -195,8 +195,8 @@
               <textarea name="custom_hook_code" id="custom_hook_code" style="width:100%; height:240px">{$rule_info.code}</textarea>
             </div>
             <script>
-            var html_editor = new CodeMirror.fromTextArea(document.getElementById("custom_hook_code"), {literal}{{/literal}
-                mode: "javascript"
+            var custom_html_editor = new CodeMirror.fromTextArea(document.getElementById("custom_hook_code"), {literal}{{/literal}
+                mode: "xml"
             {literal}});{/literal}
             </script>
           </td>
