@@ -1,4 +1,4 @@
-## module-hooks_manager
+## Hooks Manager
 
 The Hooks Manager module provides you with a simple interface to add your own code or HTML/Smarty markup allowing it to appear in Form Tools pages, or have it executed at particular junctures in the code. What code you choose to add depends entirely on your needs.
 
@@ -10,9 +10,9 @@ Read the documentation for more info.
 
 ### Documentation
 
-[http://modules.formtools.org/hooks_manager/](http://modules.formtools.org/hooks_manager/)
+[https://docs.formtools.org/modules/hooks_manager/](https://docs.formtools.org/modules/hooks_manager/)
 
 ### Form Tools Extensions
 
-For further information about Form Tools extensions, check out the following link:
-[http://www.formtools.org/extensions.php](http://www.formtools.org/extensions.php)
+For further information about Form Tools modules, check out:
+[https://modules.formtools.org](https://modules.formtools.org)
