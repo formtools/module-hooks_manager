@@ -1,4 +1,4 @@
-{include file='modules_header.tpl'}
+{ft_include file='modules_header.tpl'}
   <table cellpadding="0" cellspacing="0">
   <tr>
     <td width="45"><a href="index.php"><img src="images/icon.gif" border="0" width="34" height="34" /></a></td>
@@ -12,7 +12,7 @@
   </tr>
   </table>
 
-  {include file='messages.tpl'}
+  {ft_include file='messages.tpl'}
 
   <form action="{$same_page}" method="post">
     <input type="hidden" name="hook_id" value="{$rule_info.hook_id}" />
@@ -210,4 +210,4 @@
     </div>
 
   </form>
-{include file='modules_footer.tpl'}
+{ft_include file='modules_footer.tpl'}
