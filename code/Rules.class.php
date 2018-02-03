@@ -4,7 +4,6 @@
 namespace FormTools\Modules\HooksManager;
 
 use FormTools\Core;
-use FormTools\General;
 use FormTools\Hooks;
 use FormTools\Modules;
 use PDO, PDOException;

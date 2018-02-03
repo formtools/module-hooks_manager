@@ -6,7 +6,7 @@ namespace FormTools\Modules\HooksManager;
 use FormTools\Core;
 use FormTools\General as CoreGeneral;
 use FormTools\Module as FormToolsModule;
-use PDOException;
+use Exception;
 
 
 class Module extends FormToolsModule
@@ -16,8 +16,8 @@ class Module extends FormToolsModule
     protected $author = "Ben Keen";
     protected $authorEmail = "ben.keen@gmail.com";
     protected $authorLink = "https://formtools.org";
-    protected $version = "2.0.1";
-    protected $date = "2017-11-07";
+    protected $version = "2.0.2";
+    protected $date = "2018-02-02";
     protected $originLanguage = "en_us";
     protected $cssFiles = array(
         "{MODULEROOT}/styles.css",
@@ -46,33 +46,26 @@ class Module extends FormToolsModule
         $db = Core::$db;
         $L = $this->getLangStrings();
 
-        $queries = array();
-        $queries[] = "
-            CREATE TABLE IF NOT EXISTS {PREFIX}module_hooks_manager_rules (
-              hook_id mediumint(9) NOT NULL,
-              is_custom_hook enum('yes','no') NOT NULL default 'no',
-              status enum('enabled', 'disabled') NOT NULL default 'enabled',
-              rule_name varchar(255) NOT NULL,
-              code mediumtext NOT NULL,
-              hook_code_type enum('na', 'php', 'html', 'smarty') NOT NULL default 'na',
-              PRIMARY KEY (hook_id)
-            ) DEFAULT CHARSET=utf8
-        ";
-
-        $queries[] = "
-            INSERT INTO {PREFIX}settings (setting_name, setting_value, module)
-            VALUES ('num_rules_per_page', '10', 'hooks_manager')
-        ";
-
         try {
-            $db->beginTransaction();
-            foreach ($queries as $query) {
-                $db->query($query);
-                $db->execute();
-            }
-            $db->processTransaction();
-        } catch (PDOException $e) {
-            $db->rollbackTransaction();
+            $db->query("
+                CREATE TABLE IF NOT EXISTS {PREFIX}module_hooks_manager_rules (
+                  hook_id mediumint(9) NOT NULL,
+                  is_custom_hook enum('yes','no') NOT NULL default 'no',
+                  status enum('enabled', 'disabled') NOT NULL default 'enabled',
+                  rule_name varchar(255) NOT NULL,
+                  code mediumtext NOT NULL,
+                  hook_code_type enum('na', 'php', 'html', 'smarty') NOT NULL default 'na',
+                  PRIMARY KEY (hook_id)
+                ) Engine=InnoDB DEFAULT CHARSET=utf8
+            ");
+            $db->execute();
+
+            $db->query("
+                INSERT INTO {PREFIX}settings (setting_name, setting_value, module)
+                VALUES ('num_rules_per_page', '10', 'hooks_manager')
+            ");
+            $db->execute();
+        } catch (Exception $e) {
             return array(false, $L["text_error_installing"]);
         }
 
@@ -87,6 +80,15 @@ class Module extends FormToolsModule
         $db->execute();
 
         return array(true, "");
+    }
+
+
+    public function upgrade($module_id, $old_module_version)
+    {
+        if (CoreGeneral::isVersionEarlierThan($old_module_version, "2.0.2")) {
+            self::upgradeToFT3();
+        }
+        return array(true, "custom message");
     }
 
 
@@ -159,4 +161,61 @@ class Module extends FormToolsModule
         }
     }
 
+    /**
+     * The code hooks all changed with Form Tools 3. Convert all defined hooks that we are able to identify to their
+     * FT3 equivalents.
+     */
+    private static function upgradeToFT3()
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT *
+            FROM {PREFIX}hook_calls
+            WHERE module_folder = 'hooks_manager'
+        ");
+        $db->execute();
+        $rows = $db->fetchAll();
+
+        foreach ($rows as $row) {
+            if ($row["hook_type"] == "template") {
+                continue;
+            }
+
+            self::convertCodeHookToFT3($row["hook_id"], $row["action_location"], $row["function_name"]);
+        }
+    }
+
+    private static function convertCodeHookToFT3($hook_id, $action_location, $function_name)
+    {
+        $db = Core::$db;
+
+        // see if we can find the hook
+        $found = false;
+        foreach (HookVersionMap::$hookMapFT2ToFT3 as $mapping) {
+            $old = $mapping["old"];
+            if ($old["action_location"] == $action_location && $old["function_name"] == $function_name) {
+                $found = $mapping["new"];
+                break;
+            }
+        }
+
+        if (!$found) {
+            return;
+        }
+
+        $db->query("
+            UPDATE {PREFIX}hook_calls
+            SET    action_location = :action_location,
+                   function_name = :function_name
+            WHERE  hook_id = :hook_id  
+        ");
+        $db->bindAll(array(
+            "action_location" => $found["action_location"],
+            "function_name" => $found["function_name"],
+            "hook_id" => $hook_id
+        ));
+        $db->execute();
+    }
 }
+
