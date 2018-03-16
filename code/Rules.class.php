@@ -123,7 +123,7 @@ class Rules
         $db = Core::$db;
 
         // the code hook dropdown contains the function name, a comma, then the location where it's call (e.g. "start", "end" etc.)
-        list ($function_name, $location) = mb_split(",", $info["code_hook_dropdown"]);
+        list ($function_name, $location) = explode(",", $info["code_hook_dropdown"]);
 
         // register our new rule for this hook
         list ($success, $hook_id) = Hooks::registerHook("code", "hooks_manager", $location, $function_name,
